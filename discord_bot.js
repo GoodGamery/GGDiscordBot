@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 try {
 	var Discord = require("discord.js");
 } catch (e){
