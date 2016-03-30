@@ -1,0 +1,6 @@
+{
+  "main": "mtg.js",
+  "dependencies": {
+    "request": ">=2.58.0"
+  }
+}
