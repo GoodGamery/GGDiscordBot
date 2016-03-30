@@ -53,23 +53,38 @@ exports.mtg = {
             bot.sendMessage(msg.channel, '**' + cardName + '**\n```' + cardSnippet + '```');
 
             var filePath = './files/tmp/' + cardId + '.jpg';
-            var file = fs.createWriteStream(filePath);
 
             // Function to send file message
             function sendFile() {
                 bot.sendFile(msg.channel, filePath, cardName + '.jpg');
             }
 
-            // Image attachment
-            var imgRequest = http.get(imageUrl, function(response) {
-                response.pipe(file);
-                file.on('finish', function() {
-                    file.close(sendFile);  // close() is async, call cb after close completes.
-                    
+            // Download the file from imageUrl
+            function downloadFile() {
+                var file = fs.createWriteStream(filePath);
+                var imgRequest = http.get(imageUrl, function(response) {
+                    response.pipe(file);
+                    file.on('finish', function() {
+                        file.close(sendFile);  // close() is async, call sendFIle after close completes.
+                    });
+                }).on('error', function(err) { // Handle errors
+                    fs.unlink(dest); // Delete the file async. (But we don't check the result)
+                    console.error(err.message);
                 });
-            }).on('error', function(err) { // Handle errors
-                fs.unlink(dest); // Delete the file async. (But we don't check the result)
-                console.error(err.message);
+            }
+
+            // Does the file already exist?
+            fs.stat(filePath, function(err, stat) {
+                if(err === null && stat.size > 0) {
+                    sendFile();
+                } else if(err && err.code === 'ENOENT' || stat.size === 0) {
+                    // File didn't exist. Download it
+                    console.log('Downloading file ' + filePath);
+                    downloadFile();
+                } else {
+                    console.error('Some other error occured when checking when ' + filePath + ' exists: ', err.code);
+                    downloadFile();
+                }
             });
         });
     }
