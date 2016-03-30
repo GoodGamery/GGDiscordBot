@@ -458,7 +458,7 @@ var commands = {
         description: "roll one die with x sides, or multiple dice using d20 syntax. Default value is 10",
         process: function(bot,msg,suffix) {
             if (suffix.split("d").length <= 1) {
-                bot.sendMessage(msg.channel,msg.author + " rolled a " + d20.roll(suffix || "10"));
+                bot.sendMessage(msg.channel,msg.author + " rolled '" + suffix + "' for " + d20.verboseRoll(suffix || "10"));
             }  
             else if (suffix.split("d").length > 1) {
                 var eachDie = suffix.split("+");
@@ -469,7 +469,7 @@ var commands = {
                     };
                 }
                 if (passing == eachDie.length) {
-                    bot.sendMessage(msg.channel,msg.author + " rolled a " + d20.roll(suffix));
+                    bot.sendMessage(msg.channel,msg.author + " rolled '" + suffix + "' for " + d20.verboseRoll(suffix));
                 }  else {
                     bot.sendMessage(msg.channel,msg.author + " tried to roll too many dice at once!");
                 }
