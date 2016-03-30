@@ -1,4 +1,6 @@
 var request = require("request");
+var http = require('http');
+var fs = require('fs');
 
 var searchResource = 'http://gatherer.wizards.com/Handlers/InlineCardSearch.ashx?nameFragment=';
 var imageResource = 'http://gatherer.wizards.com/Handlers/Image.ashx?type=card&multiverseid='
@@ -40,11 +42,35 @@ exports.mtg = {
                     break;
                 }
             }
+
+            // Results
             var cardId = data.Results[cardIndex].ID;
             var cardSnippet = data.Results[cardIndex].Snippet;
             var cardName = data.Results[cardIndex].Name;
             var imageUrl = imageResource + cardId;
-            bot.sendMessage(msg.channel, cardName + '\n' + cardSnippet + '\n' + imageUrl);
+
+            // Send message with card snippet
+            bot.sendMessage(msg.channel, '**' + cardName + '**\n```' + cardSnippet + '```');
+
+            var filePath = './files/tmp/' + cardId + '.jpg';
+            var file = fs.createWriteStream(filePath);
+
+            // Function to send file message
+            function sendFile() {
+                bot.sendFile(msg.channel, filePath, cardName + '.jpg');
+            }
+
+            // Image attachment
+            var imgRequest = http.get(imageUrl, function(response) {
+                response.pipe(file);
+                file.on('finish', function() {
+                    file.close(sendFile);  // close() is async, call cb after close completes.
+                    
+                });
+            }).on('error', function(err) { // Handle errors
+                fs.unlink(dest); // Delete the file async. (But we don't check the result)
+                console.error(err.message);
+            });
         });
     }
 };
