@@ -1,6 +1,14 @@
 # DiscordBot
 A chat bot for discord app based off <a href="https://github.com/hydrabolt/discord.js/">discord.js</a>
 
+# Starting the server in linux
+```
+sudo cp ggbot.service /etc/systemd/system
+sudo systemctl restart ggbot
+sudo journalctl -u ggbot
+sudo journalctl --follow -u ggbot
+```
+
 # Features:
 - !gif query => returns a gif example !gif cute cats doing stuff
 - !image query => returns an image from Google Images (careful, no adult filter)
