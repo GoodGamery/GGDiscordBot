@@ -35,3 +35,5 @@ messagebox.json
 
 # Files in the download folder
 files/tmp/*
+
+nohup.out
