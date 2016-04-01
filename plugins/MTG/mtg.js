@@ -19,7 +19,7 @@ exports.mtg = {
             try {
                 data = JSON.parse(body);
             } catch (error) {
-                console.log(error)
+                console.error(error);
                 return;
             }
             if(!data){
@@ -61,16 +61,30 @@ exports.mtg = {
 
             // Download the file from imageUrl
             function downloadFile() {
-                var file = fs.createWriteStream(filePath);
-                var imgRequest = http.get(imageUrl, function(response) {
-                    response.pipe(file);
-                    file.on('finish', function() {
-                        file.close(sendFile);  // close() is async, call sendFIle after close completes.
+                var file;
+                try {
+                    file = fs.createWriteStream(filePath);
+                    var imgRequest = http.get(imageUrl, function(response) {
+                        response.pipe(file);
+                        file.on('finish', function() {
+                            file.close(sendFile);  // close() is async, call sendFIle after close completes.
+                        });
+                    }).on('error', function(err) { // Handle errors
+                        fs.unlink(dest); // Delete the file async. (But we don't check the result)
+                        console.error(err.message);
                     });
-                }).on('error', function(err) { // Handle errors
-                    fs.unlink(dest); // Delete the file async. (But we don't check the result)
-                    console.error(err.message);
-                });
+                } catch (error) {
+                    // Problem downloading/saving the file
+                    console.error(error);
+                    if (file && file.close) {
+                        try {
+                            file.close();
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }
+                    return;
+                }
             }
 
             // Does the file already exist?
@@ -86,6 +100,7 @@ exports.mtg = {
                     downloadFile();
                 }
             });
+                
         });
     }
 };
