@@ -469,9 +469,9 @@ var commands = {
                     };
                 }
                 if (passing == eachDie.length) {
-                    bot.sendMessage(msg.channel,msg.author + " rolled '" + suffix + "' for " + d20.verboseRoll(suffix));
+                    bot.sendMessage(msg.channel,":game_die: " + msg.author + " rolled '" + suffix + "' for " + d20.verboseRoll(suffix));
                 }  else {
-                    bot.sendMessage(msg.channel,msg.author + " tried to roll too many dice at once!");
+                    bot.sendMessage(msg.channel,msg.author + " tried to roll too many dice at once! :game_die: :game_die: :game_die: :game_die:");
                 }
             }
         }
