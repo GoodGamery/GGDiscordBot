@@ -38,10 +38,6 @@ Please note that you must have a working C compiler and Python in your path for
 * [Visual Studio Community 2015](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
 * [Python 2.7](https://www.python.org/downloads/)
 
-
-## RSS
-You can create an rss.json file adding rss feeds as commands. See rss.json.example for details.
-
 ## Special instructions for setting up google search and youtube APIs:
 
 (thanks @SchwererKonigstiger)

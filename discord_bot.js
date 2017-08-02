@@ -351,20 +351,6 @@ var commands = {
             });
         }
     },
-    "rss": {
-        description: "lists available rss feeds",
-        process: function(bot,msg,suffix) {
-            /*var args = suffix.split(" ");
-            var count = args.shift();
-            var url = args.join(" ");
-            rssfeed(bot,msg,url,count,full);*/
-            bot.sendMessage(msg.channel,"Available feeds:", function(){
-                for(var c in rssFeeds){
-                    bot.sendMessage(msg.channel,c + ": " + rssFeeds[c].url);
-                }
-            });
-        }
-    },
     "reddit": {
         usage: "[subreddit]",
         description: "Returns the top post on reddit. Can optionally pass a subreddit to get the top psot there instead",
@@ -582,27 +568,6 @@ var commands = {
 	}
     }
 };
-try{
-var rssFeeds = require("./rss.json");
-function loadFeeds(){
-    for(var cmd in rssFeeds){
-        commands[cmd] = {
-            usage: "[count]",
-            description: rssFeeds[cmd].description,
-            url: rssFeeds[cmd].url,
-            process: function(bot,msg,suffix){
-                var count = 1;
-                if(suffix != null && suffix != "" && !isNaN(suffix)){
-                    count = suffix;
-                }
-                rssfeed(bot,msg,this.url,count,false);
-            }
-        };
-    }
-}
-} catch(e) {
-    console.log("Couldn't load rss.json. See rss.json.example if you want rss feed commands. error: " + e);
-}
 
 try{
 	aliases = require("./alias.json");
@@ -654,7 +619,6 @@ function rssfeed(bot,msg,url,count,full){
 var bot = new Discord.Client();
 
 bot.on("ready", function () {
-    loadFeeds();
 	console.log("Ready to begin! Serving in " + bot.channels.length + " channels");
 	require("./plugins.js").init();
 });
@@ -726,7 +690,7 @@ bot.on("message", function (msg) {
         }
         
         if (msg.author != bot.user && msg.isMentioned(bot.user)) {
-                bot.sendMessage(msg.channel,msg.author + ", you called?");
+                bot.sendMessage(msg.channel,msg.author + ", you called?", ()=>{});
         }
     }
 });
