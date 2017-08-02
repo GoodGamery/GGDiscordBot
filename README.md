@@ -14,7 +14,6 @@ sudo journalctl --follow -u ggbot
 - !image query => returns an image from Google Images (careful, no adult filter)
 - !youtube query=> returns a youtube link
 - !wiki query=> returns the summary of the first search result on Wikipedia
-- !wolfram query => queries Wolfram Alpha for results
 - !meme memetype "text1" "text2" => returns a meme image. notice the quotes around text, they are vitally important
 - !say text => echos text
 - !alias => create custom shorthand commands in channel!

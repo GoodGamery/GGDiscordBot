@@ -28,7 +28,6 @@
     "underscore": "1.8.x",
     "wikijs": "0.1.x",
     "winston": "1.0.x",
-    "wolfram": "0.3.x",
     "yahoo-finance": "0.2.x",
     "youtube-node": "1.2.x"
   },
